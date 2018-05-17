@@ -8,13 +8,13 @@ import (
 )
 
 //stdout
-func (fig figure) Print() {
+func (fig *Figure) Print() {
   for _, printRow := range fig.Slicify() {
     fmt.Println(printRow)
   }
 }
 
-func (fig figure) Scroll(duration, stillness int, direction string) {
+func (fig *Figure) Scroll(duration, stillness int, direction string) {
   endTime := time.Now().Add(time.Duration(duration) * time.Millisecond)
   fig.phrase = fig.phrase + "   "
   clearScreen()
@@ -33,7 +33,7 @@ func (fig figure) Scroll(duration, stillness int, direction string) {
   }
 }
 
-func (fig figure) Blink(duration, timeOn, timeOff int) {
+func (fig *Figure) Blink(duration, timeOn, timeOff int) {
   if timeOff < 0 { timeOff = timeOn }
   endTime := time.Now().Add(time.Duration(duration) * time.Millisecond)
   clearScreen()
@@ -45,11 +45,11 @@ func (fig figure) Blink(duration, timeOn, timeOff int) {
   }
 }
 
-func (fig figure) Dance(duration, freeze int) {
+func (fig *Figure) Dance(duration, freeze int) {
   endTime := time.Now().Add(time.Duration(duration) * time.Millisecond)
   font := fig.font                                                             //TODO: change to deep copy
   font.evenLetters()
-  figures := []figure{figure{font: font}, figure{font: font}}
+  figures := []Figure{Figure{font: font}, Figure{font: font}}
   clearScreen()
   for i, c := range fig.phrase {
     appenders := []string{" ", " "}
@@ -67,7 +67,7 @@ func (fig figure) Dance(duration, freeze int) {
 }
 
 //writers
-func Write(w io.Writer, fig figure) {
+func Write(w io.Writer, fig Figure) {
   for _, printRow := range fig.Slicify() {
     fmt.Fprintf(w, "%v\n", printRow)
   }

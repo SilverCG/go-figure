@@ -10,29 +10,29 @@ const ascii_offset = 32
 const first_ascii = ' '
 const last_ascii = '~'
 
-type figure struct {
+type Figure struct {
   phrase string
   font
   strict bool
 }
 
-func NewFigure(phrase, fontName string, strict bool) figure {
+func NewFigure(phrase, fontName string, strict bool) Figure {
   font := newFont(fontName)
   if font.reverse {
     phrase = reverse(phrase)
   }
-  return figure{phrase, font, strict}
+  return Figure{phrase, font, strict}
 }
 
-func NewFigureWithFont(phrase string, reader io.Reader, strict bool) figure {
+func NewFigureWithFont(phrase string, reader io.Reader, strict bool) Figure {
   font := newFontFromReader(reader)
   if font.reverse {
     phrase = reverse(phrase)
   }
-  return figure{phrase, font, strict}
+  return Figure{phrase, font, strict}
 }
 
-func (figure figure) Slicify() (rows []string) {
+func (figure *Figure) Slicify() (rows []string) {
   for r := 0 ; r < figure.font.height ; r++ {
     printRow := ""
     for _, char := range figure.phrase {
